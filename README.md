@@ -1,6 +1,6 @@
 # devopsflow
 
-Simple Java + Maven sample project for practicing a basic DevOps workflow with unit tests, code coverage, Docker, and Jenkins.
+Simple Java + Maven sample project for practicing a basic DevOps workflow with unit tests, code coverage, Docker, Jenkins, and ngrok.
 
 ## Tech Stack
 
@@ -10,6 +10,7 @@ Simple Java + Maven sample project for practicing a basic DevOps workflow with u
 - JaCoCo
 - Docker
 - Jenkins Pipeline
+- ngrok
 
 ## Project Structure
 
@@ -75,3 +76,19 @@ docker run --rm my-docker-app
    - `docker run my-docker-app`
 
 It also publishes test reports and archives JaCoCo artifacts from `target/site/jacoco/`.
+
+## Local CI/CD Webhook Trigger Setup (GitHub + ngrok)
+
+To trigger the Jenkins pipeline automatically when you push code to GitHub:
+
+1. **Expose your local Jenkins server using ngrok**:
+   ```bash
+   ngrok http 8080
+   ```
+2. **Configure the GitHub Webhook**:
+   - Navigate to your GitHub repository -> **Settings** -> **Webhooks** -> **Add webhook**.
+   - **Payload URL**: `https://<your-ngrok-subdomain>.ngrok-free.dev/github-webhook/` (the trailing `/` is required).
+   - **Content type**: `application/json`.
+   - **Trigger events**: `Just the push event`.
+3. **Enable Trigger in Jenkins**:
+   - In your Jenkins pipeline configuration, under **Build Triggers**, check **GitHub hook trigger for GITScm polling**.
